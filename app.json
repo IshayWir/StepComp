@@ -3,11 +3,14 @@
     "name": "stepcomp",
     "slug": "stepcomp",
     "version": "1.0.0",
+    "scheme": "stepcomp",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.stepcomp.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +26,19 @@
     },
     "plugins": [
       "expo-secure-store",
-      "@kingstinct/react-native-healthkit"
-    ]
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "StepComp reads your daily step count from Health to show you on challenge leaderboards.",
+          "NSHealthUpdateUsageDescription": "StepComp does not write any data to Health.",
+          "background": false
+        }
+      ],
+      "expo-router",
+      "@react-native-community/datetimepicker"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }
