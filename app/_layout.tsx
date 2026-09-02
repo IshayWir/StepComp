@@ -3,9 +3,9 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { AuthProvider, useAuth } from '../src/context/AuthProvider';
 
 function RootNavigator() {
-  const { session, profile, initializing } = useAuth();
+  const { session, profile, initializing, profileLoading } = useAuth();
 
-  if (initializing) {
+  if (initializing || profileLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator />

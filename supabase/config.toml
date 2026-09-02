@@ -320,7 +320,7 @@ max_frequency = "5s"
 # `twitter`, `x`, `slack`, `spotify`, `workos`, `zoom`.
 [auth.external.apple]
 enabled = true
-client_id = "host.exp.Exponent"
+client_id = "host.exp.Exponent,com.stepcomp.app"
 # DO NOT commit your OAuth provider secret to git. Use environment variable substitution instead:
 secret = ""
 # Overrides the default auth callback URL derived from auth.external_url.
