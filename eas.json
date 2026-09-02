@@ -19,6 +19,13 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "ascAppId": "6807613798",
+        "ascApiKeyPath": "C:\\Users\\ishay\\OneDrive\\Desktop\\AuthKey_WU45C4796S.p8",
+        "ascApiKeyIssuerId": "d72bf407-4c3f-4df2-aea9-ca5654d2345a",
+        "ascApiKeyId": "WU45C4796S"
+      }
+    }
   }
 }
