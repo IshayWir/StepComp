@@ -1,6 +1,14 @@
 import { useCallback, useState } from 'react';
-import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { getChallenge, type Challenge } from '../lib/challenges';
 import { getChallengeLeaderboard, type LeaderboardRow } from '../lib/leaderboard';
 import { syncRecentSteps } from '../lib/stepSync';
@@ -8,6 +16,7 @@ import { useAuth } from '../context/AuthProvider';
 
 export default function LeaderboardScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const { session } = useAuth();
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [rows, setRows] = useState<LeaderboardRow[]>([]);
@@ -73,7 +82,15 @@ export default function LeaderboardScreen() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={<Text style={styles.empty}>No participants yet.</Text>}
             renderItem={({ item, index }) => (
-              <View style={[styles.row, item.user_id === session?.user.id && styles.rowSelf]}>
+              <Pressable
+                style={[styles.row, item.user_id === session?.user.id && styles.rowSelf]}
+                onPress={() =>
+                  router.push({
+                    pathname: '/challenge/[id]/participant/[userId]',
+                    params: { id, userId: item.user_id, displayName: item.display_name },
+                  })
+                }
+              >
                 <Text style={styles.rank}>{index + 1}</Text>
                 <Text style={styles.name} numberOfLines={1}>
                   {item.display_name}
@@ -84,7 +101,7 @@ export default function LeaderboardScreen() {
                     +{item.today_steps.toLocaleString()} today
                   </Text>
                 </View>
-              </View>
+              </Pressable>
             )}
           />
         </>

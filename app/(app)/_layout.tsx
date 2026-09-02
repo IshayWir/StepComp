@@ -7,6 +7,7 @@ export default function AppLayout() {
       <Stack.Screen name="create" options={{ presentation: 'modal', title: 'New Challenge' }} />
       <Stack.Screen name="join" options={{ presentation: 'modal', title: 'Join Challenge' }} />
       <Stack.Screen name="challenge/[id]" />
+      <Stack.Screen name="challenge/[id]/participant/[userId]" />
     </Stack>
   );
 }
