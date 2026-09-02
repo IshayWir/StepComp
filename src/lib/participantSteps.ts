@@ -41,6 +41,14 @@ export function computeBestDay(rows: DailyStepRow[]): { date: string; steps: num
   return { date: best.date, steps: best.step_count };
 }
 
+/** Average daily steps across the challenge's elapsed range so far (zero-step days included). */
+export function computeAverage(rows: DailyStepRow[]): number | null {
+  if (rows.length === 0) return null;
+
+  const total = rows.reduce((sum, row) => sum + row.step_count, 0);
+  return Math.round(total / rows.length);
+}
+
 const WEEKDAY_NAMES = [
   'Sunday',
   'Monday',

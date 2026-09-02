@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Pressable,
   RefreshControl,
@@ -9,7 +10,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { getChallenge, type Challenge } from '../lib/challenges';
+import { getChallenge, removeParticipant, type Challenge } from '../lib/challenges';
 import { getChallengeLeaderboard, type LeaderboardRow } from '../lib/leaderboard';
 import { syncRecentSteps } from '../lib/stepSync';
 import { useAuth } from '../context/AuthProvider';
@@ -56,6 +57,27 @@ export default function LeaderboardScreen() {
     setRefreshing(false);
   };
 
+  const isCreator = !!challenge && !!session && challenge.created_by === session.user.id;
+
+  const confirmRemove = (row: LeaderboardRow) => {
+    if (!id) return;
+    Alert.alert('Remove participant?', `${row.display_name} will be removed from this challenge.`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await removeParticipant(id, row.user_id);
+            await load();
+          } catch (err: any) {
+            Alert.alert('Failed to remove participant', err.message ?? 'Please try again.');
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: challenge?.name ?? 'Leaderboard' }} />
@@ -89,6 +111,11 @@ export default function LeaderboardScreen() {
                     pathname: '/challenge/[id]/participant/[userId]',
                     params: { id, userId: item.user_id, displayName: item.display_name },
                   })
+                }
+                onLongPress={
+                  isCreator && item.user_id !== session?.user.id
+                    ? () => confirmRemove(item)
+                    : undefined
                 }
               >
                 <Text style={styles.rank}>{index + 1}</Text>

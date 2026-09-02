@@ -3,6 +3,7 @@ import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import {
+  computeAverage,
   computeBestDay,
   computeBestWeekday,
   getParticipantDailySteps,
@@ -46,6 +47,7 @@ export default function ParticipantDetailScreen() {
   );
 
   const bestDay = computeBestDay(rows);
+  const average = computeAverage(rows);
   const bestWeekday = computeBestWeekday(rows);
 
   const chartData = rows.map((row) => ({
@@ -71,6 +73,10 @@ export default function ParticipantDetailScreen() {
               <Text style={styles.statLabel}>
                 Best day{bestDay ? ` · ${formatShortDate(bestDay.date)}` : ''}
               </Text>
+            </View>
+            <View style={styles.stat}>
+              <Text style={styles.statValue}>{average !== null ? average.toLocaleString() : '—'}</Text>
+              <Text style={styles.statLabel}>Average steps</Text>
             </View>
             <View style={styles.stat}>
               <Text style={styles.statValue}>{daysInLead ?? '—'}</Text>
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
   },
   stat: {
     flexGrow: 1,
-    flexBasis: '30%',
+    flexBasis: '45%',
     borderWidth: 1,
     borderColor: '#e5e5e5',
     borderRadius: 12,

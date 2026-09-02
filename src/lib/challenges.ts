@@ -49,3 +49,12 @@ export async function joinChallengeByCode(code: string): Promise<Challenge> {
   if (error) throw error;
   return data as Challenge;
 }
+
+export async function removeParticipant(challengeId: string, userId: string): Promise<void> {
+  const { error } = await supabase.rpc('remove_participant', {
+    p_challenge_id: challengeId,
+    p_user_id: userId,
+  });
+
+  if (error) throw error;
+}
